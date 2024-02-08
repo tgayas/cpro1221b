@@ -1,0 +1,93 @@
+package org.example;
+
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        int[] numbers = generateRandomNumbers(11, 51);
+        Arrays.sort(numbers);
+        printArray(numbers);
+
+        int total = calculateTotal(numbers);
+        double mean = calculateMean(total, numbers.length);
+        double median = calculateMedian(numbers);
+        int mode = calculateMode(numbers);
+        double standardDeviation = calculateStandardDeviation(numbers);
+
+        printResults(total, numbers.length, mean, median, mode, standardDeviation);
+    }
+
+    public static int[] generateRandomNumbers(int length, int upperBound) {
+        int[] numbers = new int[length];
+        for (int i = 0; i < length; i++) {
+            numbers[i] = (int) (Math.random() * (upperBound + 1)); // 0 to upperBound
+        }
+        return numbers;
+    }
+
+    public static void printArray(int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.printf("Element #%d is %d\n", i, array[i]);
+        }
+    }
+
+    public static int calculateTotal(int[] array) {
+        int total = 0;
+        for (int num : array) {
+            total += num;
+        }
+        return total;
+    }
+
+    public static double calculateMean(int total, int length) {
+        return (double) total / length;
+    }
+
+    public static double calculateMedian(int[] array) {
+        int middle = array.length / 2;
+        return (array.length % 2 != 0) ? array[middle] : (array[middle - 1] + array[middle]) / 2.0;
+    }
+
+    public static int calculateMode(int[] array) {
+        Arrays.sort(array);
+
+        int mode = array[0];
+        int currentCount = 1;
+        int maxCount = 1;
+
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] == array[i - 1]) {
+                currentCount++;
+            } else {
+                currentCount = 1;
+            }
+
+            if (currentCount > maxCount) {
+                maxCount = currentCount;
+                mode = array[i];
+            }
+        }
+
+        return mode;
+    }
+
+    public static double calculateStandardDeviation(int[] array) {
+        double mean = calculateMean(calculateTotal(array), array.length);
+        double deviationSum = 0.0;
+
+        for (int num : array) {
+            deviationSum += Math.pow(num - mean, 2);
+        }
+
+        return Math.sqrt(deviationSum / array.length);
+    }
+
+    public static void printResults(int total, int count, double mean, double median, int mode, double standardDeviation) {
+        System.out.printf("Total: %d\n", total);
+        System.out.printf("Count: %d\n", count);
+        System.out.printf("Average: %.2f\n", mean);
+        System.out.printf("Median: %.2f\n", median);
+        System.out.printf("Mode: %d\n", mode);
+        System.out.printf("Standard Deviation: %.2f\n", standardDeviation);
+    }
+}
